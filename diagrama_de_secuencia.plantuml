@@ -1,0 +1,39 @@
+@startuml
+actor Jugador
+
+Jugador -> main.py : Inicia el juego()
+main.py -> menu.py : mostrar_menu()
+menu.py -> Jugador : mostrar_opciones()
+Jugador -> menu.py : seleccionar_opcion()
+menu.py -> main.py : opcion_seleccionada()
+
+main.py -> juego.py : configurar_juego()
+juego.py -> rondas.py : establecer_rondas()
+main.py -> juego.py : iniciar_juego()
+
+loop Durante el juego
+    Jugador -> juego.py : realizar_movimiento()
+    juego.py -> colision.py : verificar_colision()
+    colision.py --> juego.py : resultado_colision()
+    
+    alt Si hay colisión
+        juego.py -> Jugador : notificar_colision()
+        Jugador -> juego.py : actualizar_estado()
+    end
+    
+    juego.py -> scoref.py : actualizar_puntaje()
+    scoref.py --> juego.py : puntaje_actualizado()
+    
+    juego.py -> decision.py : evaluar_condiciones()
+    decision.py --> juego.py : resultado_evaluacion()
+    
+    alt Si juego continúa
+        juego.py -> Jugador : solicitar_nueva_accion()
+    else Si juego termina
+        juego.py -> creditos.py : mostrar_creditos()
+        Jugador -> main.py : terminar_juego()
+    end
+end
+
+main.py -> Jugador : Juego Terminado
+@enduml

@@ -1,0 +1,126 @@
+@startuml
+
+class Juego {
+    -screen: Surface
+    -clock: Clock
+    -juego_terminado: bool
+    -num_balas: int
+    -score: int
+    -mirilla: Mirilla
+    -vuelo: Vuelo
+    -rondas_juego: Rondas
+    -scoref: Scoref
+    -creditos: Creditos
+    +__init__()
+    +mostrar_contadores()
+    +mostrar_creditos()
+    +handle_shooting(event)
+    +mostrar_imagenes()
+    +reiniciar_pajaro()
+    +reproducir_sonido_colision()
+    +reproducir_sonido_fallido()
+    +run()
+}
+
+class Pajaro {
+    -alive: bool
+    -explosion_frames: int
+    +__init__()
+    +dibujar_explosion(screen, pos)
+    +is_explosion_finished()
+}
+
+class Vuelo {
+    -contador_movimientos: int
+    -rect: Rect
+    -alive: bool
+    +__init__(x, y)
+    +movimiento()
+    +volar_derecha(velocidad)
+    +volar_izquierda(velocidad)
+    +obtener_contador_movimientos()
+}
+
+class Rondas {
+    -vuelo: Vuelo
+    +__init__(vuelo)
+    +mostrar_ronda(screen)
+    +verificar_reinicio_contador()
+    +inicializar_tiempo_inicio()
+    +reiniciar_rondas()
+    +verificar_y_mostrar_scoref(screen, scoref)
+}
+
+class Shot {
+    +__init__(crosshair_img)
+    +shoot()
+}
+
+class Mirilla {
+    -crosshair_img: Surface
+    +__init__(crosshair_img)
+    +shoot()
+}
+
+class Colision {
+    +handle_collisions(vuelo, mirilla, num_balas, score, mouse_pos)
+}
+
+class ParametrosInicio {
+    +WIDTH: int
+    +HEIGHT: int
+    +titulo: str
+}
+
+class Portada {
+    +toleportada(duracion)
+}
+
+class Fondo {
+    +__init__()
+    +FondoBase()
+    +FondoMontañas()
+}
+
+class Menu {
+    +tolemenu()
+}
+
+class FinDelJuego {
+    -juego_terminado: bool
+    -creditos_mostrados: bool
+    +mostrar_creditos()
+}
+
+class Decision {
+    +toledecision()
+}
+
+class Scoref {
+    -score: int
+    -screen: Surface
+    +__init__(screen)
+    +actualizar_score(score)
+    +mostrar_scoref()
+}
+
+class Creditos {
+    +mostrar_creditos()
+}
+
+Juego o-- Pajaro : composición
+Juego o-- Shot : composición
+Pajaro <-- Rondas : agregación
+Pajaro <-- Vuelo : composición
+Shot <-- Mirilla : composición
+Shot o-- Colision : composición
+Juego o-- ParametrosInicio : agregación
+ParametrosInicio o-- Portada : composición
+ParametrosInicio o-- Fondo : composición
+ParametrosInicio o-- Menu : composición
+Juego o-- FinDelJuego : composición
+FinDelJuego <-- Decision : agregación
+FinDelJuego <-- Scoref : agregación
+FinDelJuego <-- Creditos : agregación
+
+@enduml
